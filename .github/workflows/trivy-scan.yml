@@ -1,4 +1,4 @@
-name: Trivy Scan
+name: Trivy Vulnerability Scan
 
 on:
   push:
@@ -21,4 +21,10 @@ jobs:
         curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.22.0/trivy_0.22.0_Linux-x86_64.tar.gz | tar xz -C /usr/local/bin
 
     - name: Run Trivy scan
-      run: trivy fs .
+      run: trivy fs . --format json --output trivy-results.json
+
+    - name: Upload Trivy Scan Results as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: trivy-results
+        path: trivy-results.json
